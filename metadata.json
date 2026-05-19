@@ -1,0 +1,6 @@
+{
+  "name": "Lab Inventory System",
+  "description": "Sistem Manajemen Inventaris Lab Komputer with MySQL backend and JRPG-style HUD design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

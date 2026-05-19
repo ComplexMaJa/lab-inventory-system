@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=Sora:wght@700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary-fixed-dim: #47d6ff;
+  --color-on-tertiary-fixed: #241a00;
+  --color-on-tertiary-fixed-variant: #584400;
+  --color-background: #111225;
+  --color-error: #ffb4ab;
+  --color-tertiary-fixed: #ffe08b;
+  --color-on-primary-fixed: #001f28;
+  --color-surface-container-lowest: #0b0c1f;
+  --color-inverse-primary: #00677f;
+  --color-on-primary-container: #00566a;
+  --color-tertiary: #ffd96c;
+  --color-on-tertiary: #3d2f00;
+  --color-on-tertiary-container: #614c00;
+  --color-outline: #859399;
+  --color-primary-fixed: #b6ebff;
+  --color-on-secondary-fixed: #002118;
+  --color-on-background: #e1e0fb;
+  --color-surface-container: #1d1e32;
+  --color-surface-container-high: #27283d;
+  --color-inverse-surface: #e1e0fb;
+  --color-tertiary-container: #eabb00;
+  --color-on-surface: #e1e0fb;
+  --color-surface-variant: #323348;
+  --color-primary: #a5e7ff;
+  --color-secondary-fixed: #24ffcd;
+  --color-secondary: #ffffff;
+  --color-tertiary-fixed-dim: #f1c100;
+  --color-surface-container-low: #191a2d;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+  --color-on-secondary-fixed-variant: #00513f;
+  --color-secondary-fixed-dim: #00e0b3;
+  --color-primary-container: #00d2ff;
+  --color-inverse-on-surface: #2e2f43;
+  --color-error-container: #93000a;
+  --color-surface: #111225;
+  --color-on-primary-fixed-variant: #004e60;
+  --color-surface-container-highest: #323348;
+  --color-on-primary: #003543;
+  --color-on-secondary-container: #00725a;
+  --color-secondary-container: #24ffcd;
+  --color-on-secondary: #00382b;
+  --color-surface-tint: #47d6ff;
+  --color-surface-dim: #111225;
+  --color-outline-variant: #3c494e;
+  --color-on-surface-variant: #bbc9cf;
+  --color-surface-bright: #37374d;
+
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", sans-serif;
+  --font-mono: "Space Grotesk", ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-sans antialiased;
+  }
+}
+
+.scanline-overlay {
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+  background-size: 100% 4px;
+  @apply pointer-events-none;
+}
+
+.angled-cut {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+}
+
+.hud-glow {
+  box-shadow: 0 0 20px rgba(71, 214, 255, 0.4);
+}
+
+.card-bg-gradient {
+  background: linear-gradient(135deg, rgba(29, 30, 50, 0.8) 0%, rgba(11, 12, 31, 0.9) 100%);
+}
