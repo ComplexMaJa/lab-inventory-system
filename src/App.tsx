@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate, Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, PlusCircle, LogOut, Settings, Bell, Search, Edit2, Trash2, CheckCircle2, AlertTriangle, Hammer, ChevronLeft, ChevronRight, Save, X } from "lucide-react";
+import { LayoutDashboard, Package, PlusCircle, LogOut, Settings, Bell, Search, Edit2, Trash2, CheckCircle2, AlertTriangle, Hammer, Save } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { AuthProvider, LoginPage, RequireAuth, useAuth } from "./auth";
 
 // --- Types ---
 interface Inventaris {
@@ -61,12 +62,34 @@ const SideNavBar = () => {
       </div>
 
       <div className="mt-auto skew-x-[2deg] pr-4 mb-10">
-        <button className="w-full flex items-center gap-4 text-error font-mono opacity-70 hover:opacity-100 p-4 transition-all hover:bg-surface-variant/40 hover:translate-x-2 duration-200">
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
+        <LogoutButton />
       </div>
     </nav>
+  );
+};
+
+const LogoutButton = () => {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+  return (
+    <div className="flex flex-col gap-2">
+      {user && (
+        <span className="font-mono text-[10px] text-on-surface-variant/50 uppercase tracking-widest px-4">
+          {user.nama_lengkap}
+        </span>
+      )}
+      <button
+        onClick={handleLogout}
+        className="w-full flex items-center gap-4 text-error font-mono opacity-70 hover:opacity-100 p-4 transition-all hover:bg-surface-variant/40 hover:translate-x-2 duration-200"
+      >
+        <LogOut size={20} />
+        <span>Logout</span>
+      </button>
+    </div>
   );
 };
 
@@ -398,17 +421,14 @@ const InventoryForm = ({ mode }: { mode: 'add' | 'edit' }) => {
   );
 };
 
-export default function App() {
+function ProtectedLayout() {
   return (
-    <Router>
+    <RequireAuth>
       <div className="min-h-screen">
-        {/* Animated Background Overlay */}
         <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-fixed-dim/5 via-background to-background"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-fixed-dim/5 via-background to-background" />
         </div>
-        
         <SideNavBar />
-        
         <main className="pl-64 min-h-screen relative z-10 transition-all">
           <Routes>
             <Route path="/" element={<><TopAppBar title="Dashboard" /><Dashboard /></>} />
@@ -418,6 +438,19 @@ export default function App() {
           </Routes>
         </main>
       </div>
+    </RequireAuth>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/*" element={<ProtectedLayout />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }

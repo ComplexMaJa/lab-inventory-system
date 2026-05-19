@@ -18,6 +18,27 @@ CREATE DATABASE IF NOT EXISTS `db_lab_komputer`
 USE `db_lab_komputer`;
 
 -- ------------------------------------------------------------
+-- Table: pengguna (users)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `pengguna` (
+  `id_user`       INT          NOT NULL AUTO_INCREMENT,
+  `username`      VARCHAR(50)  NOT NULL,
+  `password`      VARCHAR(100) NOT NULL,
+  `nama_lengkap`  VARCHAR(100) NOT NULL,
+  `role`          ENUM('admin','petugas') NOT NULL DEFAULT 'petugas',
+  PRIMARY KEY (`id_user`),
+  UNIQUE KEY `uq_username` (`username`)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+-- Default credentials: admin / admin123
+INSERT INTO `pengguna` (`username`, `password`, `nama_lengkap`, `role`) VALUES
+  ('admin', 'admin123', 'Administrator', 'admin'),
+  ('petugas', 'petugas123', 'Petugas Lab', 'petugas')
+ON DUPLICATE KEY UPDATE `username` = `username`;
+
+-- ------------------------------------------------------------
 -- Table: inventaris
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `inventaris` (
