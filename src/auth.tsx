@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Lock, User, AlertCircle, Loader2 } from "lucide-react";
+import { Lock, User, AlertCircle, Loader2, Package, ChevronRight } from "lucide-react";
 
 // ── Auth Context ─────────────────────────────────────────────
 
@@ -86,72 +86,131 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
-
-      {/* Background glows */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary-fixed-dim/5 blur-[120px]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-secondary-fixed/5 blur-[120px]" />
-        <div className="scanline-overlay absolute inset-0 opacity-[0.03]" />
+    <div
+      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      style={{ background: "radial-gradient(ellipse at 70% 50%, #0a2040 0%, #050e1f 60%, #020810 100%)" }}
+    >
+      {/* ── Radar / concentric rings ── */}
+      <div className="absolute pointer-events-none" style={{ right: "8%", top: "50%", transform: "translateY(-50%)" }}>
+        {[340, 280, 220, 160, 110, 70, 36].map((size, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full border"
+            style={{
+              width: size * 2,
+              height: size * 2,
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              borderColor: `rgba(0, 200, 255, ${0.06 + i * 0.015})`,
+            }}
+          />
+        ))}
+        <div style={{ width: 340, height: 340, position: "relative" }}>
+          <div className="absolute rounded-full" style={{ inset: "30%", background: "radial-gradient(circle, rgba(0,180,255,0.28) 0%, transparent 70%)", filter: "blur(22px)" }} />
+        </div>
       </div>
 
-      {/* Grid lines */}
+      {/* ── Light rays ── */}
+      {[15, 45, 75, 110, 148].map((deg, i) => (
+        <div
+          key={i}
+          className="absolute pointer-events-none"
+          style={{
+            right: "28%",
+            top: "50%",
+            width: "120vw",
+            height: "1px",
+            background: `linear-gradient(90deg, transparent 0%, rgba(0,180,255,${0.04 + i * 0.012}) 60%, transparent 100%)`,
+            transform: `rotate(${deg}deg)`,
+            transformOrigin: "right center",
+          }}
+        />
+      ))}
+
+      {/* ── Pixel grid ── */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(71,214,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(71,214,255,1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+            "linear-gradient(rgba(0,180,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,180,255,0.04) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
         }}
       />
 
-      <motion.div
-        initial={{ opacity: 0, y: 32 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md px-4"
-      >
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 mb-6 relative">
-            <div className="absolute inset-0 bg-primary-fixed-dim/20 blur-xl rounded-full" />
-            <div className="relative w-20 h-20 border-2 border-primary-fixed-dim/60 skew-x-[-5deg] flex items-center justify-center bg-surface-container-lowest/80">
-              <img
-                src="https://api.dicebear.com/7.x/pixel-art/svg?seed=AdminLab"
-                alt="avatar"
-                className="w-12 h-12 skew-x-[5deg]"
-              />
-            </div>
+      {/* ── Binary text strips ── */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none opacity-[0.06]">
+        {["10110100 01001011 11010010", "01001101 10100110 01011010", "11010010 00101101 10110100"].map((t, i) => (
+          <div
+            key={i}
+            className="font-mono text-[10px] text-cyan-400 absolute whitespace-nowrap"
+            style={{ top: `${15 + i * 28}%`, letterSpacing: "0.22em" }}
+          >
+            {Array(7).fill(t).join("   ·   ")}
           </div>
-          <h1 className="font-display text-4xl font-extrabold text-primary-fixed-dim italic tracking-tighter leading-none">
-            Lab Inventory
-          </h1>
-          <p className="font-mono text-[11px] text-on-surface-variant/60 mt-2 uppercase tracking-[0.3em]">
-            System Access Terminal v2.0
-          </p>
+        ))}
+      </div>
+
+      {/* ── Auth card ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative z-10 w-full px-4"
+        style={{ maxWidth: 340 }}
+      >
+        {/* Corner bracket — top-right */}
+        <div className="absolute -top-3 -right-1 w-7 h-7 pointer-events-none">
+          <div className="absolute top-0 right-0 w-full h-[2px]" style={{ background: "rgba(0,220,255,0.75)" }} />
+          <div className="absolute top-0 right-0 w-[2px] h-full" style={{ background: "rgba(0,220,255,0.75)" }} />
+        </div>
+        {/* Corner bracket — bottom-left */}
+        <div className="absolute -bottom-3 -left-1 w-7 h-7 pointer-events-none">
+          <div className="absolute bottom-0 left-0 w-full h-[2px]" style={{ background: "rgba(0,220,255,0.75)" }} />
+          <div className="absolute bottom-0 left-0 w-[2px] h-full" style={{ background: "rgba(0,220,255,0.75)" }} />
         </div>
 
-        {/* Card */}
-        <div className="relative bg-surface-container-lowest/80 border border-primary-fixed-dim/30 backdrop-blur-xl p-8 angled-cut overflow-hidden">
-          <div className="scanline-overlay absolute inset-0 opacity-[0.04]" />
-
-          {/* Top accent bar */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-fixed-dim to-transparent" />
-
-          <form onSubmit={handleSubmit} className="relative flex flex-col gap-6">
-            <div className="text-center border-b border-surface-variant pb-4 mb-2">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-secondary-fixed">
-                ● Masukkan Kredensial Anda
+        {/* Card body */}
+        <div
+          className="px-8 py-8"
+          style={{
+            background: "rgba(4, 16, 36, 0.85)",
+            border: "1px solid rgba(0, 200, 255, 0.2)",
+            backdropFilter: "blur(18px)",
+          }}
+        >
+          {/* ── Title ── */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-[6px]">
+              <Package size={22} className="text-cyan-400" />
+              <h1
+                className="font-display text-[28px] font-extrabold uppercase tracking-[0.18em]"
+                style={{ color: "#e8f8ff" }}
+              >
+                AUTH
+              </h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-[3px] h-4 block" style={{ background: "#00d4ff" }} />
+              <span
+                className="font-mono text-[10px] uppercase"
+                style={{ color: "rgba(0,212,255,0.7)", letterSpacing: "0.22em" }}
+              >
+                Lab Inventory System
               </span>
             </div>
+          </div>
 
-            {/* Username */}
-            <div className="flex flex-col gap-2">
-              <label className="font-mono text-[11px] text-primary-fixed-dim uppercase tracking-widest">
-                Username
+          <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+            {/* Operator ID */}
+            <div className="flex flex-col gap-[6px]">
+              <label
+                className="font-mono text-[10px] uppercase"
+                style={{ color: "#00d4ff", letterSpacing: "0.2em" }}
+              >
+                Operator ID
               </label>
-              <div className="relative">
-                <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
+              <div className="relative flex items-center">
                 <input
                   id="login-username"
                   type="text"
@@ -159,19 +218,28 @@ export function LoginPage() {
                   autoComplete="username"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
-                  placeholder="admin"
-                  className="w-full bg-surface/50 border border-outline-variant/50 focus:border-primary-fixed-dim text-on-surface pl-9 pr-4 py-3 font-mono text-sm outline-none transition-colors"
+                  className="w-full bg-transparent border-0 border-b font-mono text-sm py-[6px] pr-7 outline-none"
+                  style={{
+                    borderColor: "rgba(0,200,255,0.28)",
+                    color: "#cceeff",
+                    caretColor: "#00d4ff",
+                  }}
+                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(0,220,255,0.75)")}
+                  onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,200,255,0.28)")}
                 />
+                <User size={14} className="absolute right-0" style={{ color: "rgba(0,200,255,0.4)" }} />
               </div>
             </div>
 
-            {/* Password */}
-            <div className="flex flex-col gap-2">
-              <label className="font-mono text-[11px] text-primary-fixed-dim uppercase tracking-widest">
-                Password
+            {/* Passcode */}
+            <div className="flex flex-col gap-[6px]">
+              <label
+                className="font-mono text-[10px] uppercase"
+                style={{ color: "#00d4ff", letterSpacing: "0.2em" }}
+              >
+                Passcode
               </label>
-              <div className="relative">
-                <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
+              <div className="relative flex items-center">
                 <input
                   id="login-password"
                   type="password"
@@ -179,9 +247,16 @@ export function LoginPage() {
                   autoComplete="current-password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-surface/50 border border-outline-variant/50 focus:border-primary-fixed-dim text-on-surface pl-9 pr-4 py-3 font-mono text-sm outline-none transition-colors"
+                  className="w-full bg-transparent border-0 border-b font-mono text-sm py-[6px] pr-7 outline-none"
+                  style={{
+                    borderColor: "rgba(0,200,255,0.28)",
+                    color: "#cceeff",
+                    caretColor: "#00d4ff",
+                  }}
+                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(0,220,255,0.75)")}
+                  onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,200,255,0.28)")}
                 />
+                <Lock size={14} className="absolute right-0" style={{ color: "rgba(0,200,255,0.4)" }} />
               </div>
             </div>
 
@@ -189,13 +264,14 @@ export function LoginPage() {
             <AnimatePresence>
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
+                  initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  className="flex items-center gap-3 bg-error/10 border border-error/40 px-4 py-3 text-error"
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-2 font-mono text-[11px]"
+                  style={{ color: "#ff8080" }}
                 >
-                  <AlertCircle size={16} />
-                  <span className="font-mono text-xs">{error}</span>
+                  <AlertCircle size={13} />
+                  {error}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -205,26 +281,41 @@ export function LoginPage() {
               id="login-submit"
               type="submit"
               disabled={loading}
-              className="mt-2 w-full bg-primary-container text-on-primary-container font-display font-bold uppercase tracking-widest py-3 skew-x-[-5deg] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 font-mono text-[11px] uppercase py-[11px] transition-all disabled:opacity-50"
+              style={{
+                background: "rgba(0,160,230,0.09)",
+                border: "1px solid rgba(0,200,255,0.48)",
+                color: "#9aeeff",
+                letterSpacing: "0.22em",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,180,255,0.2)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,160,230,0.09)")}
             >
-              <span className="skew-x-[5deg] flex items-center gap-2">
-                {loading
-                  ? <><Loader2 size={18} className="animate-spin" /> Authenticating...</>
-                  : <><Lock size={16} /> Masuk ke Sistem</>
-                }
-              </span>
+              {loading ? (
+                <><Loader2 size={14} className="animate-spin" /> Authenticating...</>
+              ) : (
+                <><span>Initialize Session</span><ChevronRight size={15} /></>
+              )}
             </button>
-
-            <p className="text-center font-mono text-[10px] text-outline/50 uppercase tracking-widest">
-              Default: admin / admin123
-            </p>
           </form>
-        </div>
 
-        {/* Bottom label */}
-        <p className="text-center font-mono text-[10px] text-outline/30 mt-6 uppercase tracking-widest">
-          © Lab Komputer — Unauthorized access prohibited
-        </p>
+          {/* ── Footer status ── */}
+          <div className="mt-6 flex items-center justify-between">
+            <span
+              className="flex items-center gap-[6px] font-mono text-[10px] uppercase"
+              style={{ color: "rgba(0,210,255,0.55)", letterSpacing: "0.18em" }}
+            >
+              <span className="w-[7px] h-[7px] rounded-full bg-green-400 block animate-pulse" />
+              System Online
+            </span>
+            <span
+              className="font-mono text-[10px] uppercase"
+              style={{ color: "rgba(0,200,255,0.32)", letterSpacing: "0.18em" }}
+            >
+              Secure Connection
+            </span>
+          </div>
+        </div>
       </motion.div>
     </div>
   );
